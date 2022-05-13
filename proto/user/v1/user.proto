@@ -1,0 +1,38 @@
+syntax = "proto3";
+package user.v1;
+option go_package = "user.v1";
+
+service UserService {
+  rpc Create(CreateRequest) returns (CreateResponse);  
+  rpc Query(QueryRequest) returns (QueryResponse);
+  rpc Get(GetRequest) returns (GetResponse);
+  rpc Update(UpdateRequest) returns (UpdateResponse);
+  rpc Delete(DeleteRequest) returns (DeleteResponse);
+}
+
+// Create contains information needed to create a new user.
+message CreateRequest  { User user = 1; }
+message CreateResponse { User user = 1; }
+
+// Query is used to specify the user to retrieve.
+message QueryRequest  {  }
+message QueryResponse  { User user = 1; }
+
+// Get is used to specify the user to retrieve.
+message GetRequest {  string id = 1;}
+message GetResponse { User user = 1; }
+
+// Update is used to specify a user to update.
+message UpdateRequest  { User user = 1; }
+message UpdateResponse { User user = 1; }
+
+// Delete contains information needed to create a new person.
+message DeleteRequest { string user_id = 1;}
+message DeleteResponse { bool success = 1;}
+
+// User represents a platform User 
+message User {
+  string id = 1 ;
+  string name = 2;
+  string email = 3;
+}
