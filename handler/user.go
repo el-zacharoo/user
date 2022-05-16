@@ -2,7 +2,6 @@ package handler
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/el-zacharoo/user/store"
 	pb "github.com/el-zacharoo/user/user.v1"
@@ -26,8 +25,6 @@ func (s UserServer) Create(ctx context.Context, req *pb.CreateRequest) (*pb.Crea
 	if !ok {
 		return &pb.CreateResponse{}, status.Errorf(codes.Aborted, "%s", "no incoming context")
 	}
-
-	fmt.Println("Write")
 
 	user := req.User
 	user.Id = uuid.NewString()

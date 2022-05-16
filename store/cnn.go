@@ -22,9 +22,9 @@ func Connect() Store {
 		log.Fatal(err)
 	}
 
-	db := client.Database("user")
+	db := client.Database("info")
 
 	return Store{
-		locaColl: db.Collection("location"),
+		locaColl: db.Collection("user"),
 	}
 }
