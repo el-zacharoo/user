@@ -12,7 +12,7 @@ type Store struct {
 	locaColl *mongo.Collection
 }
 
-func Connect() *Store {
+func Connect() Store {
 	// mongoAPI := os.Getenv("API")
 	// fmt.Println(mongoAPI)
 
@@ -24,7 +24,7 @@ func Connect() *Store {
 
 	db := client.Database("user")
 
-	return &Store{
+	return Store{
 		locaColl: db.Collection("location"),
 	}
 }

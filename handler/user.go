@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/el-zacharoo/user/store"
 	pb "github.com/el-zacharoo/user/user.v1"
@@ -11,21 +12,28 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-type Server struct {
-	pb.UnimplementedUserServiceServer
-	Store store.Store
+type Store interface {
+	Create(qr *pb.CreateRequest, md metadata.MD)
 }
 
-func (s *Server) Create(ctx context.Context, req *pb.CreateRequest) (*pb.CreateResponse, error) {
+type UserServer struct {
+	Store store.Storer
+	pb.UnimplementedUserServiceServer
+}
+
+func (s UserServer) Create(ctx context.Context, req *pb.CreateRequest) (*pb.CreateResponse, error) {
 	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
 		return &pb.CreateResponse{}, status.Errorf(codes.Aborted, "%s", "no incoming context")
 	}
 
-	req.User.Id = uuid.NewString()
+	fmt.Println("Write")
 
-	if err := s.Store.Create(md, nil); err != nil {
+	user := req.User
+	user.Id = uuid.NewString()
+
+	if err := s.Store.AddUser(user, md); err != nil {
 		return &pb.CreateResponse{}, status.Errorf(codes.Aborted, "%v", err)
 	}
-	return &pb.CreateResponse{}, nil
+	return &pb.CreateResponse{User: user}, nil
 }
