@@ -2,7 +2,6 @@ package store
 
 import (
 	"context"
-	"fmt"
 	"log"
 
 	pb "github.com/el-zacharoo/user/user.v1"
@@ -27,9 +26,9 @@ func (s Store) AddUser(u *pb.User, md metadata.MD) error {
 }
 
 func (s Store) QueryUsers(qr *pb.QueryRequest, md metadata.MD) ([]*pb.User, int64, error) {
-	var docs []*pb.User
+
 	var filter bson.M
-	var pg pb.QueryResponse
+	// var pg pb.QueryResponse
 
 	if qr.Name != "" {
 		filter = bson.M{"$text": bson.M{"$search": `"` + qr.Name + `"`}}
@@ -44,21 +43,22 @@ func (s Store) QueryUsers(qr *pb.QueryRequest, md metadata.MD) ([]*pb.User, int6
 	ctx := context.Background()
 	cursor, err := s.locaColl.Find(ctx, filter, &opt)
 	if err != nil {
-		return docs, 0, err
+		return nil, 0, err
 	}
 
-	if err := cursor.All(context.Background(), &docs); err != nil {
-		return docs, 0, err
+	var users []*pb.User
+	if err := cursor.All(context.Background(), &users); err != nil {
+		return nil, 0, err
 	}
 
-	pg.Matches, err = s.locaColl.CountDocuments(ctx, filter)
+	matches, err := s.locaColl.CountDocuments(ctx, filter)
 	if err != nil {
-		return docs, 0, err
+		return nil, 0, err
 	}
 
-	fmt.Println(docs)
+	// fmt.Println(users)
 
-	return docs, pg.Matches, err
+	return users, matches, err
 }
 
 func (s Store) GetUser(id string, md metadata.MD) (*pb.User, error) {
