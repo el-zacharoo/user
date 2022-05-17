@@ -9,6 +9,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type Store interface {
@@ -27,6 +28,8 @@ func (u UserServer) Create(ctx context.Context, req *pb.CreateRequest) (*pb.Crea
 	}
 
 	user := req.User
+	user.Created = timestamppb.Now()
+	user.Updated = timestamppb.Now()
 	user.Id = uuid.NewString()
 
 	if err := u.Store.AddUser(user, md); err != nil {
