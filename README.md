@@ -1,6 +1,6 @@
 # user
 
-This application uses `gRPC` and `proto` to send user data to mongoDB
+This application uses `gRPC` and `proto` to send user data to mongoDB. <br/>
 This is a very basic application that uses CRUD functions, 
 
 - Install/update dependencies `go get -u`
