@@ -21,7 +21,6 @@ type UserServer struct {
 }
 
 func (u UserServer) Create(ctx context.Context, req *pb.CreateRequest) (*pb.CreateResponse, error) {
-
 	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
 		return &pb.CreateResponse{}, status.Errorf(codes.Aborted, "%s", "no incoming context")
@@ -37,7 +36,6 @@ func (u UserServer) Create(ctx context.Context, req *pb.CreateRequest) (*pb.Crea
 }
 
 func (u UserServer) Query(ctx context.Context, req *pb.QueryRequest) (*pb.QueryResponse, error) {
-
 	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
 		return &pb.QueryResponse{}, status.Errorf(codes.Aborted, "%s", "no incoming context")

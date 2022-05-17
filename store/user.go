@@ -2,6 +2,7 @@ package store
 
 import (
 	"context"
+	"fmt"
 	"log"
 
 	pb "github.com/el-zacharoo/user/user.v1"
@@ -27,12 +28,10 @@ func (s Store) AddUser(u *pb.User, md metadata.MD) error {
 
 func (s Store) QueryUsers(qr *pb.QueryRequest, md metadata.MD) ([]*pb.User, int64, error) {
 
-	filter := bson.M{}
+	var filter bson.M
 
 	if qr.Name != "" {
-		filter = bson.M{"$and": bson.A{filter,
-			bson.M{"name": qr.Name},
-		}}
+		filter = bson.M{"$text": bson.M{"$search": `"` + qr.Name + `"`}}
 	}
 
 	opt := options.FindOptions{
@@ -59,7 +58,7 @@ func (s Store) QueryUsers(qr *pb.QueryRequest, md metadata.MD) ([]*pb.User, int6
 		return nil, 0, err
 	}
 
-	return nil, 0, err
+	return docs, pg.Matches, err
 }
 
 func (s Store) GetUser(id string, md metadata.MD) (*pb.User, error) {
