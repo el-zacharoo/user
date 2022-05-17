@@ -13,10 +13,6 @@ import (
 	pb "github.com/el-zacharoo/user/user.v1"
 )
 
-type Store interface {
-	Create(qr *pb.CreateRequest, md metadata.MD)
-}
-
 type UserServer struct {
 	Store store.Storer
 	pb.UnimplementedUserServiceServer
