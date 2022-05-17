@@ -16,9 +16,9 @@ func main() {
 		log.Fatalln("Failed to listen:", err)
 	}
 
-	st := store.Connect()
+	store := store.Connect()
 	grpcServer := grpc.NewServer()
-	h := &handler.UserServer{Store: st}
+	h := &handler.UserServer{Store: store}
 
 	pb.RegisterUserServiceServer(grpcServer, h)
 
