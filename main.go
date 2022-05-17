@@ -4,11 +4,12 @@ import (
 	"log"
 	"net"
 
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
+
 	"github.com/el-zacharoo/user/handler"
 	"github.com/el-zacharoo/user/store"
 	pb "github.com/el-zacharoo/user/user.v1"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/reflection"
 )
 
 func main() {

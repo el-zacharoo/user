@@ -4,11 +4,12 @@ import (
 	"context"
 	"log"
 
-	pb "github.com/el-zacharoo/user/user.v1"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"google.golang.org/grpc/metadata"
+
+	pb "github.com/el-zacharoo/user/user.v1"
 )
 
 type Storer interface {

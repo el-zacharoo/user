@@ -3,13 +3,14 @@ package handler
 import (
 	"context"
 
-	"github.com/el-zacharoo/user/store"
-	pb "github.com/el-zacharoo/user/user.v1"
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
+
+	"github.com/el-zacharoo/user/store"
+	pb "github.com/el-zacharoo/user/user.v1"
 )
 
 type Store interface {
