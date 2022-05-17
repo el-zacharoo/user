@@ -37,18 +37,33 @@ func (u UserServer) Create(ctx context.Context, req *pb.CreateRequest) (*pb.Crea
 }
 
 func (u UserServer) Query(ctx context.Context, req *pb.QueryRequest) (*pb.QueryResponse, error) {
+
 	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
 		return &pb.QueryResponse{}, status.Errorf(codes.Aborted, "%s", "no incoming context")
 	}
 
-	usr, mat, err := u.Store.QueryUsers(req, md)
+	cur, mat, err := u.Store.QueryUsers(req, md)
 	if err != nil {
 		return &pb.QueryResponse{}, status.Errorf(codes.Aborted, "%v", err)
 	}
 
 	return &pb.QueryResponse{
-		User:    usr,
+		Cursor:  cur,
 		Matches: mat,
 	}, nil
+}
+
+func (u UserServer) Get(ctx context.Context, req *pb.GetRequest) (*pb.GetResponse, error) {
+	md, ok := metadata.FromIncomingContext(ctx)
+	if !ok {
+		return &pb.GetResponse{}, status.Errorf(codes.Aborted, "%s", "no incoming context")
+	}
+
+	user, err := u.Store.GetUser(req.Id, md)
+	if err != nil {
+		return &pb.GetResponse{}, status.Errorf(codes.Aborted, "%v", err)
+	}
+
+	return &pb.GetResponse{User: user}, nil
 }

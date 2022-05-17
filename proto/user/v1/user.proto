@@ -21,7 +21,7 @@ message QueryRequest  {
   string name = 3; 
 }
 message QueryResponse  { 
-  repeated User user = 1;
+  repeated User cursor = 1;
   int64 matches = 2;
 }
 

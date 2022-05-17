@@ -6,6 +6,7 @@ import (
 
 	pb "github.com/el-zacharoo/user/user.v1"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"google.golang.org/grpc/metadata"
 )
@@ -13,6 +14,7 @@ import (
 type Storer interface {
 	AddUser(u *pb.User, md metadata.MD) error
 	QueryUsers(qr *pb.QueryRequest, md metadata.MD) ([]*pb.User, int64, error)
+	GetUser(id string, md metadata.MD) (*pb.User, error)
 }
 
 func (s Store) AddUser(u *pb.User, md metadata.MD) error {
@@ -39,7 +41,8 @@ func (s Store) QueryUsers(qr *pb.QueryRequest, md metadata.MD) ([]*pb.User, int6
 		Sort:  bson.M{"name": 1},
 	}
 
-	pg := pb.QueryResponse{User: []*pb.User{}}
+	pg := pb.QueryResponse{}
+	var docs []*pb.User
 
 	ctx := context.Background()
 	cursor, err := s.locaColl.Find(ctx, filter, &opt)
@@ -47,8 +50,7 @@ func (s Store) QueryUsers(qr *pb.QueryRequest, md metadata.MD) ([]*pb.User, int6
 		return nil, 0, err
 	}
 
-	docs := []pb.User{}
-	if err := cursor.All(ctx, &docs); err != nil {
+	if err := cursor.All(context.Background(), &docs); err != nil {
 		return nil, 0, err
 	}
 
@@ -58,4 +60,17 @@ func (s Store) QueryUsers(qr *pb.QueryRequest, md metadata.MD) ([]*pb.User, int6
 	}
 
 	return nil, 0, err
+}
+
+func (s Store) GetUser(id string, md metadata.MD) (*pb.User, error) {
+
+	var m pb.User
+	if err := s.locaColl.FindOne(context.Background(), bson.M{"id": id}).Decode(&m); err != nil {
+		if err == mongo.ErrNoDocuments {
+			return &m, err
+		}
+		return &pb.User{}, err
+	}
+
+	return &pb.User{}, nil
 }
