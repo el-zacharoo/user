@@ -14,7 +14,6 @@ This is a very basic application that uses CRUD functions.
 - Make sure server reflection is enabled in the methods
 - You can generate example Messages (this is particularly useful when using the CREATE method) 
 - When making a GET Request make sure the JSON message only includes existing ID's <br />
- e.g: 
  
 ```bash 
    { "id": "4942b3e9-3699-412a-9f16-01503113178f"}
