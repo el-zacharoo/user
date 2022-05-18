@@ -9,7 +9,8 @@ import (
 
 	"github.com/el-zacharoo/user/handler"
 	"github.com/el-zacharoo/user/store"
-	pb "github.com/el-zacharoo/user/user.v1"
+
+	pb "github.com/el-zacharoo/user/gen/proto/go/user/v1"
 )
 
 func main() {

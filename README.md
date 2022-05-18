@@ -5,10 +5,13 @@ This uses CRUD functions. <br />
 For now I haven't added any securtity features, or protected my db connection as this is supposed to only showcase the very basics of CRUD functions in gRPC. 
 
 ## Get Started ##
-
 - Install/update dependencies `go get -u`
-- Initiate gRPC: `protoc --proto_path=proto user/v1/user.proto --go_out=. --go-grpc_out=.`
-- Run the application `go run .`
+- Initiate gRPC: `protoc --proto_path=proto user/v1/user.proto --go_out=. --go-grpc_out=.` This is the standard way of generating gRPC, however with this app I am using a makefile to manage my commands. So instead run `make proto`, this will also send the proto definitions to `https://buf.build` as a commit. 
+- Run the application `go run .` or `make run`
+
+## Set up Docker ## 
+* To make a build on `docker` run `docker build --tag user .`
+* To run on docker `docker run -d -p 8080:8080 user`
 
 ## Postman Setup ##
 - Go to New, select gRPC Request

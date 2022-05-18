@@ -18,7 +18,7 @@ run:
 		--app-id user \
 		--app-port 9000 \
 		--app-protocol grpc \
-		--components-path ./.dapr/components \
+		--components-path ./.dapr \
 		go run .
 
 .PHONY: test

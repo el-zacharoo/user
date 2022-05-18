@@ -10,7 +10,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"google.golang.org/grpc/metadata"
 
-	pb "github.com/el-zacharoo/user/user.v1"
+	pb "github.com/el-zacharoo/user/gen/proto/go/user/v1"
 )
 
 type Storer interface {
