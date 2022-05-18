@@ -13,7 +13,7 @@ For now I haven't added any securtity features, or protected my db connection as
 ## Postman Setup ##
 - Go to New, select gRPC Request
 - Call `localhost:8080`
-- Select the proto definitions file
+- Select the proto definitions file to put into the methods input
 - Make sure server reflection is enabled in methods
 - You can generate example JSON Messages (this is particularly useful when using the CREATE method, make sure the ID field isn't present as this is being     filled in automatically when an entry is created) 
 - When making a GET Request make sure the JSON message only includes existing ID's <br />
