@@ -1,13 +1,16 @@
-# user
+# User gRPC microserverice #
 
-This application uses `gRPC` and `proto` to send user data to mongoDB. <br/>
-This is a very basic application that uses CRUD functions. 
+This application uses `gRPC` and `proto` to send user data to a database (mongoDB). <br/>
+This uses CRUD functions. <br />
+For now I haven't added any securtity features, or protected my db connection as this is supposed to only showcase the very basics of CRUD functions in gRPC. 
+
+## Get Started ##
 
 - Install/update dependencies `go get -u`
 - Initiate gRPC: `protoc --proto_path=proto user/v1/user.proto --go_out=. --go-grpc_out=.`
 - Run the application `go run .`
 
-## Postman Setup 
+## Postman Setup ##
 - Go to New, select gRPC Request
 - Call `localhost:8080`
 - Select the proto definitions file
