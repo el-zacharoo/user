@@ -9,7 +9,7 @@ This is a very basic application that uses CRUD functions.
 
 ## Postman Setup 
 - Go to New, select gRPC Request
-- Call localhost:8080 
+- Call `localhost:8080`
 - Select the proto definitions file
 - Make sure server reflection is enabled in the methods
 - You can generate example Messages (this is particularly useful when using the CREATE method) 
