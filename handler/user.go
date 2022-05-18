@@ -65,3 +65,20 @@ func (u UserServer) Get(ctx context.Context, req *pb.GetRequest) (*pb.GetRespons
 
 	return &pb.GetResponse{User: user}, nil
 }
+
+func (u UserServer) Update(ctx context.Context, req *pb.UpdateRequest) (*pb.UpdateResponse, error) {
+	md, ok := metadata.FromIncomingContext(ctx)
+	if !ok {
+		return &pb.UpdateResponse{}, status.Errorf(codes.Aborted, "%s", "no incoming context")
+	}
+
+	id := req.User.Id
+	req.User.Created = req.User.GetCreated()
+	req.User.Updated = timestamppb.Now()
+
+	if err := u.Store.UpdateUser(id, md, req.User); err != nil {
+		return &pb.UpdateResponse{}, status.Errorf(codes.Aborted, "%v", err)
+	}
+
+	return &pb.UpdateResponse{User: req.User}, nil
+}

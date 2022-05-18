@@ -2,6 +2,7 @@ package store
 
 import (
 	"context"
+	"fmt"
 	"log"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -16,6 +17,7 @@ type Storer interface {
 	AddUser(u *pb.User, md metadata.MD) error
 	QueryUsers(qr *pb.QueryRequest, md metadata.MD) ([]*pb.User, int64, error)
 	GetUser(id string, md metadata.MD) (*pb.User, error)
+	UpdateUser(id string, md metadata.MD, u *pb.User) error
 }
 
 func (s Store) AddUser(u *pb.User, md metadata.MD) error {
@@ -73,4 +75,14 @@ func (s Store) GetUser(id string, md metadata.MD) (*pb.User, error) {
 	}
 
 	return &m, nil
+}
+
+func (s Store) UpdateUser(id string, md metadata.MD, u *pb.User) error {
+	insertResult, err := s.locaColl.ReplaceOne(context.Background(), bson.M{"id": id}, u)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("\nInserted a Single Document: %v\n", insertResult)
+
+	return err
 }
