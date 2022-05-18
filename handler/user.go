@@ -74,6 +74,7 @@ func (u UserServer) Update(ctx context.Context, req *pb.UpdateRequest) (*pb.Upda
 
 	user := req.User
 	id := user.Id
+	user.Updated = timestamppb.Now()
 
 	if err := u.Store.UpdateUser(id, md, user); err != nil {
 		return &pb.UpdateResponse{}, status.Errorf(codes.Aborted, "%v", err)
