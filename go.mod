@@ -7,6 +7,8 @@ require (
 	google.golang.org/protobuf v1.28.0
 )
 
+require gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
+
 require (
 	github.com/go-stack/stack v1.8.1 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect

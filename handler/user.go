@@ -75,12 +75,22 @@ func (u UserServer) Update(ctx context.Context, req *pb.UpdateRequest) (*pb.Upda
 	user := req.User
 	id := user.Id
 
-	// user.Created = req.User.GetCreated()
-	// user.Updated = timestamppb.Now()
-
 	if err := u.Store.UpdateUser(id, md, user); err != nil {
 		return &pb.UpdateResponse{}, status.Errorf(codes.Aborted, "%v", err)
 	}
 
 	return &pb.UpdateResponse{User: user}, nil
+}
+
+func (u UserServer) Delete(ctx context.Context, req *pb.DeleteRequest) (*pb.DeleteResponse, error) {
+	md, ok := metadata.FromIncomingContext(ctx)
+	if !ok {
+		return &pb.DeleteResponse{}, status.Errorf(codes.Aborted, "%s", "no incoming context")
+	}
+
+	if err := u.Store.DeleteUser(req.Id, md); err != nil {
+		return &pb.DeleteResponse{}, status.Errorf(codes.Aborted, "%v", err)
+	}
+
+	return &pb.DeleteResponse{}, nil
 }

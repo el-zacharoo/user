@@ -42,7 +42,7 @@ message UpdateResponse { User user = 1; }
 
 // Delete contains information needed to create a new person.
 message DeleteRequest { string id = 1;}
-message DeleteResponse { bool success = 1;}
+message DeleteResponse { }
 
 // User represents a platform User 
 message User {

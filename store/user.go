@@ -18,6 +18,7 @@ type Storer interface {
 	QueryUsers(qr *pb.QueryRequest, md metadata.MD) ([]*pb.User, int64, error)
 	GetUser(id string, md metadata.MD) (*pb.User, error)
 	UpdateUser(id string, md metadata.MD, u *pb.User) error
+	DeleteUser(id string, md metadata.MD) error
 }
 
 func (s Store) AddUser(u *pb.User, md metadata.MD) error {
@@ -81,4 +82,11 @@ func (s Store) UpdateUser(id string, md metadata.MD, u *pb.User) error {
 	fmt.Printf("\nInserted a Single Document: %v\n", insertResult)
 
 	return err
+}
+
+func (s Store) DeleteUser(id string, md metadata.MD) error {
+	if _, err := s.locaColl.DeleteOne(context.Background(), bson.M{"id": id}); err != nil {
+		return err
+	}
+	return nil
 }
