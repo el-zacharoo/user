@@ -19,5 +19,5 @@ For now I haven't added any securtity features, or protected my db connection as
 - When making a GET Request make sure the JSON message only includes existing ID's <br />
  
 ```bash 
-   { "id": "4942b3e9-3699-412a-9f16-01503113178f"}
+{ "id": "4942b3e9-3699-412a-9f16-01503113178f"}
 ```
