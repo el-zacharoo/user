@@ -29,9 +29,7 @@ func (s Store) AddUser(u *pb.User, md metadata.MD) error {
 }
 
 func (s Store) QueryUsers(qr *pb.QueryRequest, md metadata.MD) ([]*pb.User, int64, error) {
-
 	var filter bson.M
-	// var pg pb.QueryResponse
 
 	if qr.Name != "" {
 		filter = bson.M{"$text": bson.M{"$search": `"` + qr.Name + `"`}}
@@ -59,22 +57,20 @@ func (s Store) QueryUsers(qr *pb.QueryRequest, md metadata.MD) ([]*pb.User, int6
 		return nil, 0, err
 	}
 
-	// fmt.Println(users)
-
 	return users, matches, err
 }
 
 func (s Store) GetUser(id string, md metadata.MD) (*pb.User, error) {
-	var m pb.User
+	var u pb.User
 
-	if err := s.locaColl.FindOne(context.Background(), bson.M{"id": id}).Decode(&m); err != nil {
+	if err := s.locaColl.FindOne(context.Background(), bson.M{"id": id}).Decode(&u); err != nil {
 		if err == mongo.ErrNoDocuments {
-			return &m, err
+			return &u, err
 		}
-		return &m, err
+		return &u, err
 	}
 
-	return &m, nil
+	return &u, nil
 }
 
 func (s Store) UpdateUser(id string, md metadata.MD, u *pb.User) error {

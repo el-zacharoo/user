@@ -3,6 +3,7 @@ package user.v1;
 
 option go_package = "user.v1";
 
+import "google/protobuf/field_mask.proto";
 import "google/protobuf/timestamp.proto";
 
 service UserService {
@@ -33,7 +34,10 @@ message GetRequest {  string id = 1;}
 message GetResponse { User user = 1; }
 
 // Update is used to specify a user to update.
-message UpdateRequest  { User user = 1; }
+message UpdateRequest  { 
+  User user = 1;
+  google.protobuf.FieldMask update_mask = 2;
+}
 message UpdateResponse { User user = 1; }
 
 // Delete contains information needed to create a new person.

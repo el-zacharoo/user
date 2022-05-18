@@ -25,9 +25,9 @@ func (u UserServer) Create(ctx context.Context, req *pb.CreateRequest) (*pb.Crea
 	}
 
 	user := req.User
+	user.Id = uuid.NewString()
 	user.Created = timestamppb.Now()
 	user.Updated = timestamppb.Now()
-	user.Id = uuid.NewString()
 
 	if err := u.Store.AddUser(user, md); err != nil {
 		return &pb.CreateResponse{}, status.Errorf(codes.Aborted, "%v", err)
@@ -72,13 +72,15 @@ func (u UserServer) Update(ctx context.Context, req *pb.UpdateRequest) (*pb.Upda
 		return &pb.UpdateResponse{}, status.Errorf(codes.Aborted, "%s", "no incoming context")
 	}
 
-	id := req.User.Id
-	req.User.Created = req.User.GetCreated()
-	req.User.Updated = timestamppb.Now()
+	user := req.User
+	id := user.Id
 
-	if err := u.Store.UpdateUser(id, md, req.User); err != nil {
+	// user.Created = req.User.GetCreated()
+	// user.Updated = timestamppb.Now()
+
+	if err := u.Store.UpdateUser(id, md, user); err != nil {
 		return &pb.UpdateResponse{}, status.Errorf(codes.Aborted, "%v", err)
 	}
 
-	return &pb.UpdateResponse{User: req.User}, nil
+	return &pb.UpdateResponse{User: user}, nil
 }
