@@ -1357,10 +1357,10 @@ func (m *User) validate(all bool) error {
 
 	}
 
-	if utf8.RuneCountInString(m.GetName()) > 100 {
+	if l := utf8.RuneCountInString(m.GetName()); l < 2 || l > 50 {
 		err := UserValidationError{
 			field:  "Name",
-			reason: "value length must be at most 100 runes",
+			reason: "value length must be between 2 and 50 runes, inclusive",
 		}
 		if !all {
 			return err

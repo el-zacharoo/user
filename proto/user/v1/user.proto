@@ -50,7 +50,7 @@ message DeleteResponse {}
 // User represents a platform User 
 message User {
   string id = 1   [ (validate.rules).string = {ignore_empty : true, uuid : true} ];
-  string name = 2 [ (validate.rules).string.max_len = 100 ];
+  string name = 2 [ (validate.rules).string = {min_len : 2, max_len : 50} ];
   string email = 3;
   google.protobuf.Timestamp  created = 4; 
   google.protobuf.Timestamp  updated = 5;
