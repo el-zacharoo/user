@@ -3,6 +3,8 @@ managed:
   enabled: true
   go_package_prefix:
     default: github.com/el-zacharoo/user/gen/proto/go
+    override:
+      buf.build/envoyproxy/protoc-gen-validate: go.buf.build/grpc/go/envoyproxy/protoc-gen-validate
     except:
       - buf.build/googleapis/googleapis
 plugins:

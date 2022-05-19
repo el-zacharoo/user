@@ -35,6 +35,9 @@ var (
 	_ = sort.Sort
 )
 
+// define the regex for a UUID once up-front
+var _user_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
+
 // Validate checks the field values on CreateRequest with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -56,6 +59,17 @@ func (m *CreateRequest) validate(all bool) error {
 	}
 
 	var errors []error
+
+	if m.GetUser() == nil {
+		err := CreateRequestValidationError{
+			field:  "User",
+			reason: "value is required",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	if all {
 		switch v := interface{}(m.GetUser()).(type) {
@@ -315,9 +329,27 @@ func (m *QueryRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Offset
+	if m.GetOffset() < 0 {
+		err := QueryRequestValidationError{
+			field:  "Offset",
+			reason: "value must be greater than or equal to 0",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
-	// no validation rules for Limit
+	if m.GetLimit() < 0 {
+		err := QueryRequestValidationError{
+			field:  "Limit",
+			reason: "value must be greater than or equal to 0",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	// no validation rules for Name
 
@@ -556,10 +588,28 @@ func (m *GetRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Id
+	if err := m._validateUuid(m.GetId()); err != nil {
+		err = GetRequestValidationError{
+			field:  "Id",
+			reason: "value must be a valid UUID",
+			cause:  err,
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	if len(errors) > 0 {
 		return GetRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+func (m *GetRequest) _validateUuid(uuid string) error {
+	if matched := _user_uuidPattern.MatchString(uuid); !matched {
+		return errors.New("invalid uuid format")
 	}
 
 	return nil
@@ -1072,10 +1122,28 @@ func (m *DeleteRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Id
+	if err := m._validateUuid(m.GetId()); err != nil {
+		err = DeleteRequestValidationError{
+			field:  "Id",
+			reason: "value must be a valid UUID",
+			cause:  err,
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	if len(errors) > 0 {
 		return DeleteRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+func (m *DeleteRequest) _validateUuid(uuid string) error {
+	if matched := _user_uuidPattern.MatchString(uuid); !matched {
+		return errors.New("invalid uuid format")
 	}
 
 	return nil
@@ -1273,9 +1341,32 @@ func (m *User) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Id
+	if m.GetId() != "" {
 
-	// no validation rules for Name
+		if err := m._validateUuid(m.GetId()); err != nil {
+			err = UserValidationError{
+				field:  "Id",
+				reason: "value must be a valid UUID",
+				cause:  err,
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+	}
+
+	if utf8.RuneCountInString(m.GetName()) > 100 {
+		err := UserValidationError{
+			field:  "Name",
+			reason: "value length must be at most 100 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	// no validation rules for Email
 
@@ -1339,6 +1430,14 @@ func (m *User) validate(all bool) error {
 
 	if len(errors) > 0 {
 		return UserMultiError(errors)
+	}
+
+	return nil
+}
+
+func (m *User) _validateUuid(uuid string) error {
+	if matched := _user_uuidPattern.MatchString(uuid); !matched {
+		return errors.New("invalid uuid format")
 	}
 
 	return nil
