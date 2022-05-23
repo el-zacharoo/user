@@ -8,4 +8,5 @@ spec:
   features:
     - name: ServiceInvocation.NoDefaultContentType
       enabled: true
-
+    - name: PubSub.Routing
+      enabled: true

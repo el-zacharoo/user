@@ -3,7 +3,10 @@ package main
 import (
 	"log"
 	"net"
+	"time"
 
+	daprpb "github.com/dapr/dapr/pkg/proto/runtime/v1"
+	dapr "github.com/dapr/go-sdk/client"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 
@@ -14,12 +17,24 @@ import (
 )
 
 func main() {
+	time.Sleep(2 * time.Second)
+	client, err := dapr.NewClient()
+	if err != nil {
+		log.Fatalf("failed to initialise Dapr client: %v", err)
+	}
+	defer client.Close()
+
 	grpcSrv := grpc.NewServer()
 	defer grpcSrv.Stop()         // stop server on exit
 	reflection.Register(grpcSrv) // for postman
 
 	h := &handler.UserServer{Store: store.Connect()}
 	pb.RegisterUserServiceServer(grpcSrv, h)
+
+	ch := handler.CallbackServer{}
+	// cs := ch.(daprpb.AppCallbackServer)
+
+	daprpb.RegisterAppCallbackServer(grpcSrv, ch)
 
 	lis, err := net.Listen("tcp", ":8080")
 	if err != nil {

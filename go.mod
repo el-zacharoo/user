@@ -1,6 +1,7 @@
 module github.com/el-zacharoo/user
 
 require (
+	github.com/dapr/dapr v1.7.3
 	github.com/google/uuid v1.3.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.10.0
 	go.buf.build/grpc/go/envoyproxy/protoc-gen-validate v1.3.6
@@ -12,6 +13,7 @@ require (
 require gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 
 require (
+	github.com/dapr/go-sdk v1.4.0
 	github.com/go-stack/stack v1.8.1 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
