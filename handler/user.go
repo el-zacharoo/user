@@ -3,11 +3,12 @@ package handler
 import (
 	"context"
 
+	dapr "github.com/dapr/go-sdk/client"
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
-	"google.golang.org/protobuf/types/known/timestamppb"
+	// "google.golang.org/protobuf/types/known/timestamppb"
 
 	pb "github.com/el-zacharoo/user/gen/proto/go/user/v1"
 	"github.com/el-zacharoo/user/store"
@@ -15,6 +16,7 @@ import (
 
 type UserServer struct {
 	Store store.Storer
+	Dapr  dapr.Client
 	pb.UnimplementedUserServiceServer
 }
 
@@ -26,8 +28,17 @@ func (u UserServer) Create(ctx context.Context, req *pb.CreateRequest) (*pb.Crea
 
 	user := req.User
 	user.Id = uuid.NewString()
-	user.Created = timestamppb.Now()
-	user.Updated = timestamppb.Now()
+	// user.Created = timestamppb.Now()
+	// user.Updated = timestamppb.Now()
+
+	// publish event
+	if err := u.Dapr.PublishEvent(
+		context.Background(),
+		"pubsub-test", "mytopic", user,
+		dapr.PublishEventWithContentType("application/json"),
+	); err != nil {
+		return &pb.CreateResponse{}, status.Errorf(codes.Aborted, "%s", "error publishing event")
+	}
 
 	if err := u.Store.AddUser(user, md); err != nil {
 		return &pb.CreateResponse{}, status.Errorf(codes.Aborted, "%v", err)
@@ -74,7 +85,7 @@ func (u UserServer) Update(ctx context.Context, req *pb.UpdateRequest) (*pb.Upda
 
 	user := req.User
 	id := user.Id
-	user.Updated = timestamppb.Now()
+	// user.Updated = timestamppb.Now()
 
 	if err := u.Store.UpdateUser(id, md, user); err != nil {
 		return &pb.UpdateResponse{}, status.Errorf(codes.Aborted, "%v", err)

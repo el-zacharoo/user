@@ -97,14 +97,6 @@
         },
         "email": {
           "type": "string"
-        },
-        "created": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "updated": {
-          "type": "string",
-          "format": "date-time"
         }
       },
       "title": "User represents a platform User"

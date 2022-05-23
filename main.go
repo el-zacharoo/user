@@ -17,6 +17,8 @@ import (
 )
 
 func main() {
+	// initialise Dapr client using DAPR_GRPC_PORT env var
+	// N.B. sleep briefly to give the dapr service time to initialise
 	time.Sleep(2 * time.Second)
 	client, err := dapr.NewClient()
 	if err != nil {
@@ -28,7 +30,10 @@ func main() {
 	defer grpcSrv.Stop()         // stop server on exit
 	reflection.Register(grpcSrv) // for postman
 
-	h := &handler.UserServer{Store: store.Connect()}
+	h := &handler.UserServer{
+		Store: store.Connect(),
+		Dapr:  client,
+	}
 	pb.RegisterUserServiceServer(grpcSrv, h)
 
 	ch := handler.CallbackServer{}

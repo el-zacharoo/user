@@ -7,8 +7,11 @@ import (
 	pb "github.com/dapr/dapr/pkg/proto/runtime/v1"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/types/known/emptypb"
+
 	// event "go.buf.build/grpc/go/ticctech/common/event/v1"
+	pbuser "github.com/el-zacharoo/user/gen/proto/go/user/v1"
 )
 
 type CallbackServer struct {
@@ -27,7 +30,7 @@ func (d CallbackServer) ListTopicSubscriptions(ctx context.Context, in *emptypb.
 			Routes: &pb.TopicRoutes{
 				Rules: []*pb.TopicRule{
 					{
-						Match: `event.data.type == "update"`,
+						Match: `event.data.name == "Zach"`,
 						Path:  "/update",
 					},
 				},
@@ -41,13 +44,15 @@ func (d CallbackServer) ListTopicSubscriptions(ctx context.Context, in *emptypb.
 // Dapr sends published messages in a CloudEvents 0.3 envelope.
 func (d CallbackServer) OnTopicEvent(ctx context.Context, in *pb.TopicEventRequest) (*pb.TopicEventResponse, error) {
 
-	fmt.Println("OnTopicEvent")
+	fmt.Println("OnTopicEvent", in.Path, string(in.Data))
 	// json event data -> event.EventData
-	// var data event.EventData
-	// if err := protojson.Unmarshal(in.Data, &data); err != nil {
-	// 	return &pb.TopicEventResponse{Status: pb.TopicEventResponse_DROP},
-	// 		status.Errorf(codes.Aborted, "issue unmarshalling data: %v", err)
-	// }
+	var user pbuser.User
+	if err := protojson.Unmarshal(in.Data, &user); err != nil {
+		return &pb.TopicEventResponse{Status: pb.TopicEventResponse_DROP},
+			status.Errorf(codes.Aborted, "issue unmarshalling data: %v", err)
+	}
+
+	fmt.Println(&user)
 
 	// // extract payload (google.protobuf.Any) from data
 	// var pl event.IdentityPayload
