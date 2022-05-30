@@ -22,11 +22,10 @@ type CallbackServer struct {
 // Dapr will call this method to get the list of topics the app wants to subscribe to.
 func (d CallbackServer) ListTopicSubscriptions(ctx context.Context, in *emptypb.Empty) (*pb.ListTopicSubscriptionsResponse, error) {
 
-	fmt.Println("ListTopicSubscriptions")
 	return &pb.ListTopicSubscriptionsResponse{
 		Subscriptions: []*pb.TopicSubscription{{
 			PubsubName: "pubsub-test",
-			Topic:      "mytopic",
+			Topic:      "topic",
 			Routes: &pb.TopicRoutes{
 				Rules: []*pb.TopicRule{
 					{

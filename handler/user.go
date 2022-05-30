@@ -34,7 +34,7 @@ func (u UserServer) Create(ctx context.Context, req *pb.CreateRequest) (*pb.Crea
 	// publish event
 	if err := u.Dapr.PublishEvent(
 		context.Background(),
-		"pubsub-test", "mytopic", user,
+		"pubsub-test", "topic", user,
 		dapr.PublishEventWithContentType("application/json"),
 	); err != nil {
 		return &pb.CreateResponse{}, status.Errorf(codes.Aborted, "%s", "error publishing event")
