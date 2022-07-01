@@ -18,10 +18,15 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserServiceClient interface {
+	// adding users.
 	Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error)
+	// quering users.
 	Query(ctx context.Context, in *QueryRequest, opts ...grpc.CallOption) (*QueryResponse, error)
+	// retrieving user.
 	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
+	// UpdateRequest is used to specify a customer to update.
 	Update(ctx context.Context, in *UpdateRequest, opts ...grpc.CallOption) (*UpdateResponse, error)
+	// Delete removes users
 	Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*DeleteResponse, error)
 }
 
@@ -82,10 +87,15 @@ func (c *userServiceClient) Delete(ctx context.Context, in *DeleteRequest, opts 
 // All implementations must embed UnimplementedUserServiceServer
 // for forward compatibility
 type UserServiceServer interface {
+	// adding users.
 	Create(context.Context, *CreateRequest) (*CreateResponse, error)
+	// quering users.
 	Query(context.Context, *QueryRequest) (*QueryResponse, error)
+	// retrieving user.
 	Get(context.Context, *GetRequest) (*GetResponse, error)
+	// UpdateRequest is used to specify a customer to update.
 	Update(context.Context, *UpdateRequest) (*UpdateResponse, error)
+	// Delete removes users
 	Delete(context.Context, *DeleteRequest) (*DeleteResponse, error)
 	mustEmbedUnimplementedUserServiceServer()
 }

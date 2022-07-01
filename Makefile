@@ -10,6 +10,10 @@ proto:
 	buf build
 	cd proto && buf push
 
+.PHONY: rungo
+rungo:
+	go run main.go
+
 .PHONY: run
 run:
 	dapr run \

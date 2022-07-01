@@ -1,4 +1,5 @@
 syntax = "proto3";
+
 package user.v1;
 
 option go_package = "user.v1";
@@ -11,8 +12,11 @@ import "google/api/annotations.proto";
 
 
 // MockDataService contains rpc methods used for
-// adding and removing mock data.
+
+
 service UserService {
+
+  // adding users.
   rpc Create(CreateRequest) returns (CreateResponse){
      option (google.api.http) = {
       post : "/v1"
@@ -20,28 +24,33 @@ service UserService {
     };
   };  
 
+  // quering users.
   rpc Query(QueryRequest) returns (QueryResponse){
      option (google.api.http) = {
-      post : "/v1"
-      body : "*"
+      get : "/v1"
     };
   };
+
+  // retrieving user.
   rpc Get(GetRequest) returns (GetResponse){
      option (google.api.http) = {
-      post : "/v1"
-      body : "*"
+      get : "/v1/{id}"
+     
     };
   };
+
+  // UpdateRequest is used to specify a customer to update.
   rpc Update(UpdateRequest) returns (UpdateResponse){
      option (google.api.http) = {
-      post : "/v1"
-      body : "*"
+        put : "/v1/{user.id}"
+        body : "*"
     };
   };
+
+  // Delete removes users
   rpc Delete(DeleteRequest) returns (DeleteResponse){
      option (google.api.http) = {
-      post : "/v1"
-      body : "*"
+       delete : "/v1/{id}"
     };
   };
 }
@@ -70,6 +79,7 @@ message UpdateRequest  {
   User user = 1;
   google.protobuf.FieldMask update_mask = 2;
 }
+
 message UpdateResponse { User user = 1; }
 
 // Delete contains information needed to create a new person.
