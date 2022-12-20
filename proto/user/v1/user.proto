@@ -1,0 +1,107 @@
+syntax = "proto3";
+
+package user.v1;
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+import "google/protobuf/field_mask.proto";
+
+// The Messaging service provides methods for managing user resources.
+service MessagingService {
+    // create a message
+    rpc Create(CreateRequest) returns (CreateResponse) {
+        option (google.api.http) = {
+          post: "/Create"
+          body: "*"
+        };
+    }
+  
+    // list messages
+    rpc Query(QueryRequest) returns (QueryResponse) {
+        option (google.api.http) = {
+          post: "/Query"
+          body: "*"
+        };
+    }
+    // get a message by id
+    rpc Get (GetRequest) returns (GetResponse) {
+        option (google.api.http) = {
+          post: "/Get"
+          body: "*"
+        };
+    }
+ // add more messages
+    rpc Update (UpdateRequest) returns (UpdateResponse) {
+        option (google.api.http) = {
+          post: "/Update"
+          body: "*"
+        };
+    }
+    // delete a message by id
+    rpc Delete (DeleteRequest) returns (DeleteResponse) {
+        option (google.api.http) = {
+          post: "/Delete"
+          body: "*"
+        };
+    }  
+}
+
+// CreateRequest creates a message.
+message CreateRequest {
+    User user = 1 [(validate.rules).message.required = true];
+}
+// CreateResponse returns a message.
+message CreateResponse {
+    User user = 1;
+}
+// QueryRequest gets a list of messages.
+message QueryRequest {
+  int64 offset = 1 [ (validate.rules).int64.gte = 0 ];
+  int64 limit = 2 [ (validate.rules).int64.gte = 0 ];
+  string search_text = 3;
+}
+// QueryResponse returns a list of messages.
+message QueryResponse {
+  repeated User cursor = 1;
+  int64 matches = 2;
+}
+
+// GetRequest gets a user by id.
+message GetRequest {
+  string user_id = 1 [ (validate.rules).string.uuid = true ];
+}
+// GetResponse returns a user by id.
+message GetResponse { 
+    User user = 1; 
+}
+
+// UpdateRequest updates a user.
+message UpdateRequest {
+  string user_id = 1 [ (validate.rules).string.uuid = true ];
+  User user = 2 [(validate.rules).message.required = true];
+  google.protobuf.FieldMask update_mask = 3 [(validate.rules).message.required = true];
+}
+// UpdateResponse returns a user.
+message UpdateResponse {
+  User user = 1;
+}
+
+// DeleteRequest deletes a user by id.
+message DeleteRequest {
+  string user_id = 1 [ (validate.rules).string.uuid = true ];
+}
+// DeleteResponse returns an empty response and can be ignored.
+message DeleteResponse {
+    User user = 1;
+}
+
+// user
+message User {
+  string user_id = 1 [ (validate.rules).string.uuid = true ];
+  string username = 2;
+  string given_name = 3;
+  string family_name = 4;
+  string email = 5;
+  string avatar = 6;
+  string id = 7;
+}

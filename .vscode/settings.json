@@ -1,0 +1,9 @@
+{
+    "go.buildTags": "jwx_es256k",
+    "go.lintFlags": [
+        "-tags jwx_es256k"
+    ],
+    "yaml.schemas": {
+        "https://json.schemastore.org/github-workflow.json": "./.github/workflows/*.y?ml"
+    }
+}

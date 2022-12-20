@@ -1,0 +1,24 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "daprd-debug",
+			"type": "daprd",
+			"appId": "entity",
+			"appPort": 8080,
+			"appProtocol": "http",
+			"config": "./.dapr/config.yaml",
+			"componentsPath": "./.dapr/components",
+			// uncomment to override Dapr default ports
+			// (when running multiple services locally):
+			// "grpcPort": 50002,
+			// "httpPort": 3501,
+			// "metricsPort": 9091
+		},
+		{
+			"appId": "entity",
+			"label": "daprd-down",
+			"type": "daprd-down"
+		}
+	]
+}

@@ -1,0 +1,31 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch with Dapr",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}",
+            // "envFile": "${workspaceFolder}/.env",
+            // override default Dapr ports
+            "env": {
+                "APP_PORT": "8080",
+                // "DAPR_GRPC_PORT": "50002",
+            },
+            "preLaunchTask": "daprd-debug",
+            "postDebugTask": "daprd-down"
+        },
+        {
+            "name": "Launch with Go",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}",
+            // "envFile": "${workspaceFolder}/.env",
+            "env": {
+                "APP_PORT": "8087",
+            }
+        }
+    ]
+}
