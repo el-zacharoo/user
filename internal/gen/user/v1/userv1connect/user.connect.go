@@ -21,12 +21,12 @@ import (
 const _ = connect_go.IsAtLeastVersion0_1_0
 
 const (
-	// MessagingServiceName is the fully-qualified name of the MessagingService service.
-	MessagingServiceName = "user.v1.MessagingService"
+	// UserServiceName is the fully-qualified name of the UserService service.
+	UserServiceName = "user.v1.UserService"
 )
 
-// MessagingServiceClient is a client for the user.v1.MessagingService service.
-type MessagingServiceClient interface {
+// UserServiceClient is a client for the user.v1.UserService service.
+type UserServiceClient interface {
 	// create a message
 	Create(context.Context, *connect_go.Request[v1.CreateRequest]) (*connect_go.Response[v1.CreateResponse], error)
 	// list messages
@@ -39,46 +39,46 @@ type MessagingServiceClient interface {
 	Delete(context.Context, *connect_go.Request[v1.DeleteRequest]) (*connect_go.Response[v1.DeleteResponse], error)
 }
 
-// NewMessagingServiceClient constructs a client for the user.v1.MessagingService service. By
-// default, it uses the Connect protocol with the binary Protobuf Codec, asks for gzipped responses,
-// and sends uncompressed requests. To use the gRPC or gRPC-Web protocols, supply the
-// connect.WithGRPC() or connect.WithGRPCWeb() options.
+// NewUserServiceClient constructs a client for the user.v1.UserService service. By default, it uses
+// the Connect protocol with the binary Protobuf Codec, asks for gzipped responses, and sends
+// uncompressed requests. To use the gRPC or gRPC-Web protocols, supply the connect.WithGRPC() or
+// connect.WithGRPCWeb() options.
 //
 // The URL supplied here should be the base URL for the Connect or gRPC server (for example,
 // http://api.acme.com or https://acme.com/grpc).
-func NewMessagingServiceClient(httpClient connect_go.HTTPClient, baseURL string, opts ...connect_go.ClientOption) MessagingServiceClient {
+func NewUserServiceClient(httpClient connect_go.HTTPClient, baseURL string, opts ...connect_go.ClientOption) UserServiceClient {
 	baseURL = strings.TrimRight(baseURL, "/")
-	return &messagingServiceClient{
+	return &userServiceClient{
 		create: connect_go.NewClient[v1.CreateRequest, v1.CreateResponse](
 			httpClient,
-			baseURL+"/user.v1.MessagingService/Create",
+			baseURL+"/user.v1.UserService/Create",
 			opts...,
 		),
 		query: connect_go.NewClient[v1.QueryRequest, v1.QueryResponse](
 			httpClient,
-			baseURL+"/user.v1.MessagingService/Query",
+			baseURL+"/user.v1.UserService/Query",
 			opts...,
 		),
 		get: connect_go.NewClient[v1.GetRequest, v1.GetResponse](
 			httpClient,
-			baseURL+"/user.v1.MessagingService/Get",
+			baseURL+"/user.v1.UserService/Get",
 			opts...,
 		),
 		update: connect_go.NewClient[v1.UpdateRequest, v1.UpdateResponse](
 			httpClient,
-			baseURL+"/user.v1.MessagingService/Update",
+			baseURL+"/user.v1.UserService/Update",
 			opts...,
 		),
 		delete: connect_go.NewClient[v1.DeleteRequest, v1.DeleteResponse](
 			httpClient,
-			baseURL+"/user.v1.MessagingService/Delete",
+			baseURL+"/user.v1.UserService/Delete",
 			opts...,
 		),
 	}
 }
 
-// messagingServiceClient implements MessagingServiceClient.
-type messagingServiceClient struct {
+// userServiceClient implements UserServiceClient.
+type userServiceClient struct {
 	create *connect_go.Client[v1.CreateRequest, v1.CreateResponse]
 	query  *connect_go.Client[v1.QueryRequest, v1.QueryResponse]
 	get    *connect_go.Client[v1.GetRequest, v1.GetResponse]
@@ -86,33 +86,33 @@ type messagingServiceClient struct {
 	delete *connect_go.Client[v1.DeleteRequest, v1.DeleteResponse]
 }
 
-// Create calls user.v1.MessagingService.Create.
-func (c *messagingServiceClient) Create(ctx context.Context, req *connect_go.Request[v1.CreateRequest]) (*connect_go.Response[v1.CreateResponse], error) {
+// Create calls user.v1.UserService.Create.
+func (c *userServiceClient) Create(ctx context.Context, req *connect_go.Request[v1.CreateRequest]) (*connect_go.Response[v1.CreateResponse], error) {
 	return c.create.CallUnary(ctx, req)
 }
 
-// Query calls user.v1.MessagingService.Query.
-func (c *messagingServiceClient) Query(ctx context.Context, req *connect_go.Request[v1.QueryRequest]) (*connect_go.Response[v1.QueryResponse], error) {
+// Query calls user.v1.UserService.Query.
+func (c *userServiceClient) Query(ctx context.Context, req *connect_go.Request[v1.QueryRequest]) (*connect_go.Response[v1.QueryResponse], error) {
 	return c.query.CallUnary(ctx, req)
 }
 
-// Get calls user.v1.MessagingService.Get.
-func (c *messagingServiceClient) Get(ctx context.Context, req *connect_go.Request[v1.GetRequest]) (*connect_go.Response[v1.GetResponse], error) {
+// Get calls user.v1.UserService.Get.
+func (c *userServiceClient) Get(ctx context.Context, req *connect_go.Request[v1.GetRequest]) (*connect_go.Response[v1.GetResponse], error) {
 	return c.get.CallUnary(ctx, req)
 }
 
-// Update calls user.v1.MessagingService.Update.
-func (c *messagingServiceClient) Update(ctx context.Context, req *connect_go.Request[v1.UpdateRequest]) (*connect_go.Response[v1.UpdateResponse], error) {
+// Update calls user.v1.UserService.Update.
+func (c *userServiceClient) Update(ctx context.Context, req *connect_go.Request[v1.UpdateRequest]) (*connect_go.Response[v1.UpdateResponse], error) {
 	return c.update.CallUnary(ctx, req)
 }
 
-// Delete calls user.v1.MessagingService.Delete.
-func (c *messagingServiceClient) Delete(ctx context.Context, req *connect_go.Request[v1.DeleteRequest]) (*connect_go.Response[v1.DeleteResponse], error) {
+// Delete calls user.v1.UserService.Delete.
+func (c *userServiceClient) Delete(ctx context.Context, req *connect_go.Request[v1.DeleteRequest]) (*connect_go.Response[v1.DeleteResponse], error) {
 	return c.delete.CallUnary(ctx, req)
 }
 
-// MessagingServiceHandler is an implementation of the user.v1.MessagingService service.
-type MessagingServiceHandler interface {
+// UserServiceHandler is an implementation of the user.v1.UserService service.
+type UserServiceHandler interface {
 	// create a message
 	Create(context.Context, *connect_go.Request[v1.CreateRequest]) (*connect_go.Response[v1.CreateResponse], error)
 	// list messages
@@ -125,60 +125,60 @@ type MessagingServiceHandler interface {
 	Delete(context.Context, *connect_go.Request[v1.DeleteRequest]) (*connect_go.Response[v1.DeleteResponse], error)
 }
 
-// NewMessagingServiceHandler builds an HTTP handler from the service implementation. It returns the
-// path on which to mount the handler and the handler itself.
+// NewUserServiceHandler builds an HTTP handler from the service implementation. It returns the path
+// on which to mount the handler and the handler itself.
 //
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
-func NewMessagingServiceHandler(svc MessagingServiceHandler, opts ...connect_go.HandlerOption) (string, http.Handler) {
+func NewUserServiceHandler(svc UserServiceHandler, opts ...connect_go.HandlerOption) (string, http.Handler) {
 	mux := http.NewServeMux()
-	mux.Handle("/user.v1.MessagingService/Create", connect_go.NewUnaryHandler(
-		"/user.v1.MessagingService/Create",
+	mux.Handle("/user.v1.UserService/Create", connect_go.NewUnaryHandler(
+		"/user.v1.UserService/Create",
 		svc.Create,
 		opts...,
 	))
-	mux.Handle("/user.v1.MessagingService/Query", connect_go.NewUnaryHandler(
-		"/user.v1.MessagingService/Query",
+	mux.Handle("/user.v1.UserService/Query", connect_go.NewUnaryHandler(
+		"/user.v1.UserService/Query",
 		svc.Query,
 		opts...,
 	))
-	mux.Handle("/user.v1.MessagingService/Get", connect_go.NewUnaryHandler(
-		"/user.v1.MessagingService/Get",
+	mux.Handle("/user.v1.UserService/Get", connect_go.NewUnaryHandler(
+		"/user.v1.UserService/Get",
 		svc.Get,
 		opts...,
 	))
-	mux.Handle("/user.v1.MessagingService/Update", connect_go.NewUnaryHandler(
-		"/user.v1.MessagingService/Update",
+	mux.Handle("/user.v1.UserService/Update", connect_go.NewUnaryHandler(
+		"/user.v1.UserService/Update",
 		svc.Update,
 		opts...,
 	))
-	mux.Handle("/user.v1.MessagingService/Delete", connect_go.NewUnaryHandler(
-		"/user.v1.MessagingService/Delete",
+	mux.Handle("/user.v1.UserService/Delete", connect_go.NewUnaryHandler(
+		"/user.v1.UserService/Delete",
 		svc.Delete,
 		opts...,
 	))
-	return "/user.v1.MessagingService/", mux
+	return "/user.v1.UserService/", mux
 }
 
-// UnimplementedMessagingServiceHandler returns CodeUnimplemented from all methods.
-type UnimplementedMessagingServiceHandler struct{}
+// UnimplementedUserServiceHandler returns CodeUnimplemented from all methods.
+type UnimplementedUserServiceHandler struct{}
 
-func (UnimplementedMessagingServiceHandler) Create(context.Context, *connect_go.Request[v1.CreateRequest]) (*connect_go.Response[v1.CreateResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("user.v1.MessagingService.Create is not implemented"))
+func (UnimplementedUserServiceHandler) Create(context.Context, *connect_go.Request[v1.CreateRequest]) (*connect_go.Response[v1.CreateResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("user.v1.UserService.Create is not implemented"))
 }
 
-func (UnimplementedMessagingServiceHandler) Query(context.Context, *connect_go.Request[v1.QueryRequest]) (*connect_go.Response[v1.QueryResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("user.v1.MessagingService.Query is not implemented"))
+func (UnimplementedUserServiceHandler) Query(context.Context, *connect_go.Request[v1.QueryRequest]) (*connect_go.Response[v1.QueryResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("user.v1.UserService.Query is not implemented"))
 }
 
-func (UnimplementedMessagingServiceHandler) Get(context.Context, *connect_go.Request[v1.GetRequest]) (*connect_go.Response[v1.GetResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("user.v1.MessagingService.Get is not implemented"))
+func (UnimplementedUserServiceHandler) Get(context.Context, *connect_go.Request[v1.GetRequest]) (*connect_go.Response[v1.GetResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("user.v1.UserService.Get is not implemented"))
 }
 
-func (UnimplementedMessagingServiceHandler) Update(context.Context, *connect_go.Request[v1.UpdateRequest]) (*connect_go.Response[v1.UpdateResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("user.v1.MessagingService.Update is not implemented"))
+func (UnimplementedUserServiceHandler) Update(context.Context, *connect_go.Request[v1.UpdateRequest]) (*connect_go.Response[v1.UpdateResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("user.v1.UserService.Update is not implemented"))
 }
 
-func (UnimplementedMessagingServiceHandler) Delete(context.Context, *connect_go.Request[v1.DeleteRequest]) (*connect_go.Response[v1.DeleteResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("user.v1.MessagingService.Delete is not implemented"))
+func (UnimplementedUserServiceHandler) Delete(context.Context, *connect_go.Request[v1.DeleteRequest]) (*connect_go.Response[v1.DeleteResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("user.v1.UserService.Delete is not implemented"))
 }

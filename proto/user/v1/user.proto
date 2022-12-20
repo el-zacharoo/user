@@ -7,7 +7,7 @@ import "validate/validate.proto";
 import "google/protobuf/field_mask.proto";
 
 // The Messaging service provides methods for managing user resources.
-service MessagingService {
+service UserService {
     // create a message
     rpc Create(CreateRequest) returns (CreateResponse) {
         option (google.api.http) = {

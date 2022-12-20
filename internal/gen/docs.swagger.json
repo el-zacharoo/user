@@ -9,7 +9,7 @@
       "name": "AuthService"
     },
     {
-      "name": "MessagingService"
+      "name": "UserService"
     }
   ],
   "consumes": [
@@ -22,7 +22,7 @@
     "/Create": {
       "post": {
         "summary": "create a message",
-        "operationId": "MessagingService_Create",
+        "operationId": "UserService_Create",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -49,14 +49,14 @@
           }
         ],
         "tags": [
-          "MessagingService"
+          "UserService"
         ]
       }
     },
     "/Delete": {
       "post": {
         "summary": "delete a message by id",
-        "operationId": "MessagingService_Delete",
+        "operationId": "UserService_Delete",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -83,14 +83,14 @@
           }
         ],
         "tags": [
-          "MessagingService"
+          "UserService"
         ]
       }
     },
     "/Get": {
       "post": {
         "summary": "get a message by id",
-        "operationId": "MessagingService_Get",
+        "operationId": "UserService_Get",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -117,14 +117,14 @@
           }
         ],
         "tags": [
-          "MessagingService"
+          "UserService"
         ]
       }
     },
     "/Query": {
       "post": {
         "summary": "list messages",
-        "operationId": "MessagingService_Query",
+        "operationId": "UserService_Query",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -151,14 +151,14 @@
           }
         ],
         "tags": [
-          "MessagingService"
+          "UserService"
         ]
       }
     },
     "/Update": {
       "post": {
         "summary": "add more messages",
-        "operationId": "MessagingService_Update",
+        "operationId": "UserService_Update",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -185,7 +185,7 @@
           }
         ],
         "tags": [
-          "MessagingService"
+          "UserService"
         ]
       }
     },

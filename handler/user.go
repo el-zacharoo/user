@@ -14,8 +14,9 @@ import (
 )
 
 type UserServer struct {
+	// Dapr  dapr.Client
 	Store store.Storer
-	pbcnn.UnimplementedMessagingServiceHandler
+	pbcnn.UnimplementedUserServiceHandler
 }
 
 func (s UserServer) Create(ctx context.Context, req *connect.Request[pb.CreateRequest]) (*connect.Response[pb.CreateResponse], error) {

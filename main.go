@@ -16,25 +16,28 @@ const port = "localhost:8081"
 
 func main() {
 	s := store.Connect()
-
 	svc := &handler.UserServer{
 		Store: s,
 	}
 
+	c := setCORS()
+	mux := http.NewServeMux()
+	path, h := pbcnn.NewUserServiceHandler(svc)
+	mux.Handle(path, h)
+	hndlr := c.Handler(mux)
+
+	http.ListenAndServe(
+		port,
+		h2c.NewHandler(hndlr, &http2.Server{}),
+	)
+}
+
+func setCORS() *cors.Cors {
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"},
 		AllowedHeaders:   []string{"Access-Control-Allow-Origin", "Content-Type"},
 		AllowedMethods:   []string{"POST"},
 		AllowCredentials: true,
 	})
-
-	mux := http.NewServeMux()
-	path, h := pbcnn.NewMessagingServiceHandler(svc)
-	mux.Handle(path, h)
-	handler := c.Handler(mux)
-
-	http.ListenAndServe(
-		port,
-		h2c.NewHandler(handler, &http2.Server{}),
-	)
+	return c
 }
