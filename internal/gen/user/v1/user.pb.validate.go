@@ -1436,6 +1436,8 @@ func (m *User) validate(all bool) error {
 
 	// no validation rules for Id
 
+	// no validation rules for Password
+
 	if len(errors) > 0 {
 		return UserMultiError(errors)
 	}

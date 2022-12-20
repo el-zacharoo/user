@@ -1,10 +1,13 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "user/v1/user.proto",
+    "title": "auth/v1/auth.proto",
     "version": "version not set"
   },
   "tags": [
+    {
+      "name": "AuthService"
+    },
     {
       "name": "MessagingService"
     }
@@ -24,7 +27,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1CreateResponse"
+              "$ref": "#/definitions/userv1CreateResponse"
             }
           },
           "default": {
@@ -41,7 +44,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1CreateRequest"
+              "$ref": "#/definitions/userv1CreateRequest"
             }
           }
         ],
@@ -185,9 +188,61 @@
           "MessagingService"
         ]
       }
+    },
+    "/v1": {
+      "post": {
+        "summary": "adding user to auth0.",
+        "operationId": "AuthService_Create",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/authv1CreateResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "Create contains information needed to create a new authUser.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/authv1CreateRequest"
+            }
+          }
+        ],
+        "tags": [
+          "AuthService"
+        ]
+      }
     }
   },
   "definitions": {
+    "authv1CreateRequest": {
+      "type": "object",
+      "properties": {
+        "authUser": {
+          "$ref": "#/definitions/v1AuthUser"
+        }
+      },
+      "description": "Create contains information needed to create a new authUser."
+    },
+    "authv1CreateResponse": {
+      "type": "object",
+      "properties": {
+        "authUser": {
+          "$ref": "#/definitions/v1AuthUser"
+        }
+      },
+      "description": "CreateResponse returns the newly created authUser for the Create method."
+    },
     "protobufAny": {
       "type": "object",
       "properties": {
@@ -215,7 +270,7 @@
         }
       }
     },
-    "v1CreateRequest": {
+    "userv1CreateRequest": {
       "type": "object",
       "properties": {
         "user": {
@@ -224,7 +279,7 @@
       },
       "description": "CreateRequest creates a message."
     },
-    "v1CreateResponse": {
+    "userv1CreateResponse": {
       "type": "object",
       "properties": {
         "user": {
@@ -232,6 +287,33 @@
         }
       },
       "description": "CreateResponse returns a message."
+    },
+    "v1AuthUser": {
+      "type": "object",
+      "properties": {
+        "givenName": {
+          "type": "string"
+        },
+        "familyName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "connection": {
+          "type": "string"
+        },
+        "clientId": {
+          "type": "string"
+        },
+        "userMetadata": {
+          "$ref": "#/definitions/v1UserMetadata"
+        }
+      },
+      "title": "conatains the values used for submitting an entry to auth0"
     },
     "v1DeleteRequest": {
       "type": "object",
@@ -349,9 +431,21 @@
         },
         "id": {
           "type": "string"
+        },
+        "password": {
+          "type": "string"
         }
       },
       "title": "user"
+    },
+    "v1UserMetadata": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string"
+        }
+      },
+      "title": "nested map"
     }
   }
 }

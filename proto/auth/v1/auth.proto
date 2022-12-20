@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package auth.v1;
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+// user is created in auth0 here
+service AuthService {
+  // adding user to auth0.
+  rpc Create(CreateRequest) returns (CreateResponse){
+     option (google.api.http) = {
+      post : "/v1"
+      body : "*"
+    };
+  };  
+}
+
+// Create contains information needed to create a new authUser.
+message CreateRequest  { 
+  AuthUser auth_user = 1 [(validate.rules).message.required = true]; 
+}
+// CreateResponse returns the newly created authUser for the Create method.
+message CreateResponse { 
+  AuthUser auth_user = 1; 
+}
+
+// conatains the values used for submitting an entry to auth0 
+message AuthUser { 
+    string given_name = 1;
+    string family_name = 2;
+    string email = 3;
+    string password = 4;
+    string connection  = 5;
+    string client_id = 6;
+    UserMetadata user_metadata = 7;
+
+}
+// nested map
+message UserMetadata {
+    string user_id = 1;
+}

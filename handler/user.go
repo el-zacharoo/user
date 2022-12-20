@@ -13,12 +13,12 @@ import (
 	"github.com/el-zacharoo/user/store"
 )
 
-type MessagingServer struct {
+type UserServer struct {
 	Store store.Storer
 	pbcnn.UnimplementedMessagingServiceHandler
 }
 
-func (s MessagingServer) Create(ctx context.Context, req *connect.Request[pb.CreateRequest]) (*connect.Response[pb.CreateResponse], error) {
+func (s UserServer) Create(ctx context.Context, req *connect.Request[pb.CreateRequest]) (*connect.Response[pb.CreateResponse], error) {
 	reqMsg := req.Msg
 	user := reqMsg.User
 
@@ -34,7 +34,7 @@ func (s MessagingServer) Create(ctx context.Context, req *connect.Request[pb.Cre
 	return connect.NewResponse(rsp), nil
 }
 
-func (s MessagingServer) Query(ctx context.Context, req *connect.Request[pb.QueryRequest]) (*connect.Response[pb.QueryResponse], error) {
+func (s UserServer) Query(ctx context.Context, req *connect.Request[pb.QueryRequest]) (*connect.Response[pb.QueryResponse], error) {
 	reqUser := req.Msg
 
 	if reqUser.SearchText != "" {
@@ -60,7 +60,7 @@ func (s MessagingServer) Query(ctx context.Context, req *connect.Request[pb.Quer
 	return connect.NewResponse(rsp), nil
 }
 
-func (s MessagingServer) Get(ctx context.Context, req *connect.Request[pb.GetRequest]) (*connect.Response[pb.GetResponse], error) {
+func (s UserServer) Get(ctx context.Context, req *connect.Request[pb.GetRequest]) (*connect.Response[pb.GetResponse], error) {
 	reqUser := req.Msg.UserId
 
 	// store functions
@@ -74,7 +74,7 @@ func (s MessagingServer) Get(ctx context.Context, req *connect.Request[pb.GetReq
 	return connect.NewResponse(rsp), nil
 }
 
-func (s MessagingServer) Update(ctx context.Context, req *connect.Request[pb.UpdateRequest]) (*connect.Response[pb.UpdateResponse], error) {
+func (s UserServer) Update(ctx context.Context, req *connect.Request[pb.UpdateRequest]) (*connect.Response[pb.UpdateResponse], error) {
 	reqUser := req.Msg
 	msg := reqUser.User
 

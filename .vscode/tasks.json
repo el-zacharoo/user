@@ -5,7 +5,7 @@
 			"label": "daprd-debug",
 			"type": "daprd",
 			"appId": "entity",
-			"appPort": 8080,
+			"appPort": 8081,
 			"appProtocol": "http",
 			"config": "./.dapr/config.yaml",
 			"componentsPath": "./.dapr/components",

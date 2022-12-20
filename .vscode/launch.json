@@ -10,7 +10,7 @@
             // "envFile": "${workspaceFolder}/.env",
             // override default Dapr ports
             "env": {
-                "APP_PORT": "8080",
+                "APP_PORT": "8081",
                 // "DAPR_GRPC_PORT": "50002",
             },
             "preLaunchTask": "daprd-debug",

@@ -104,4 +104,5 @@ message User {
   string email = 5;
   string avatar = 6;
   string id = 7;
+  string password = 8;
 }

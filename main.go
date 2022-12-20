@@ -12,12 +12,12 @@ import (
 	"github.com/rs/cors"
 )
 
-const port = "localhost:8080"
+const port = "localhost:8081"
 
 func main() {
 	s := store.Connect()
 
-	svc := &handler.MessagingServer{
+	svc := &handler.UserServer{
 		Store: s,
 	}
 
