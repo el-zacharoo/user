@@ -25,6 +25,18 @@ const (
 	AuthServiceName = "auth.v1.AuthService"
 )
 
+// These constants are the fully-qualified names of the RPCs defined in this package. They're
+// exposed at runtime as Spec.Procedure and as the final two segments of the HTTP route.
+//
+// Note that these are different from the fully-qualified method names used by
+// google.golang.org/protobuf/reflect/protoreflect. To convert from these constants to
+// reflection-formatted method names, remove the leading slash and convert the remaining slash to a
+// period.
+const (
+	// AuthServiceCreateProcedure is the fully-qualified name of the AuthService's Create RPC.
+	AuthServiceCreateProcedure = "/auth.v1.AuthService/Create"
+)
+
 // AuthServiceClient is a client for the auth.v1.AuthService service.
 type AuthServiceClient interface {
 	// adding user to auth0.
@@ -43,7 +55,7 @@ func NewAuthServiceClient(httpClient connect_go.HTTPClient, baseURL string, opts
 	return &authServiceClient{
 		create: connect_go.NewClient[v1.CreateRequest, v1.CreateResponse](
 			httpClient,
-			baseURL+"/auth.v1.AuthService/Create",
+			baseURL+AuthServiceCreateProcedure,
 			opts...,
 		),
 	}
@@ -71,13 +83,19 @@ type AuthServiceHandler interface {
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
 func NewAuthServiceHandler(svc AuthServiceHandler, opts ...connect_go.HandlerOption) (string, http.Handler) {
-	mux := http.NewServeMux()
-	mux.Handle("/auth.v1.AuthService/Create", connect_go.NewUnaryHandler(
-		"/auth.v1.AuthService/Create",
+	authServiceCreateHandler := connect_go.NewUnaryHandler(
+		AuthServiceCreateProcedure,
 		svc.Create,
 		opts...,
-	))
-	return "/auth.v1.AuthService/", mux
+	)
+	return "/auth.v1.AuthService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case AuthServiceCreateProcedure:
+			authServiceCreateHandler.ServeHTTP(w, r)
+		default:
+			http.NotFound(w, r)
+		}
+	})
 }
 
 // UnimplementedAuthServiceHandler returns CodeUnimplemented from all methods.

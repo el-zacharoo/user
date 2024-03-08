@@ -25,6 +25,26 @@ const (
 	UserServiceName = "user.v1.UserService"
 )
 
+// These constants are the fully-qualified names of the RPCs defined in this package. They're
+// exposed at runtime as Spec.Procedure and as the final two segments of the HTTP route.
+//
+// Note that these are different from the fully-qualified method names used by
+// google.golang.org/protobuf/reflect/protoreflect. To convert from these constants to
+// reflection-formatted method names, remove the leading slash and convert the remaining slash to a
+// period.
+const (
+	// UserServiceCreateProcedure is the fully-qualified name of the UserService's Create RPC.
+	UserServiceCreateProcedure = "/user.v1.UserService/Create"
+	// UserServiceQueryProcedure is the fully-qualified name of the UserService's Query RPC.
+	UserServiceQueryProcedure = "/user.v1.UserService/Query"
+	// UserServiceGetProcedure is the fully-qualified name of the UserService's Get RPC.
+	UserServiceGetProcedure = "/user.v1.UserService/Get"
+	// UserServiceUpdateProcedure is the fully-qualified name of the UserService's Update RPC.
+	UserServiceUpdateProcedure = "/user.v1.UserService/Update"
+	// UserServiceDeleteProcedure is the fully-qualified name of the UserService's Delete RPC.
+	UserServiceDeleteProcedure = "/user.v1.UserService/Delete"
+)
+
 // UserServiceClient is a client for the user.v1.UserService service.
 type UserServiceClient interface {
 	// create a message
@@ -51,27 +71,27 @@ func NewUserServiceClient(httpClient connect_go.HTTPClient, baseURL string, opts
 	return &userServiceClient{
 		create: connect_go.NewClient[v1.CreateRequest, v1.CreateResponse](
 			httpClient,
-			baseURL+"/user.v1.UserService/Create",
+			baseURL+UserServiceCreateProcedure,
 			opts...,
 		),
 		query: connect_go.NewClient[v1.QueryRequest, v1.QueryResponse](
 			httpClient,
-			baseURL+"/user.v1.UserService/Query",
+			baseURL+UserServiceQueryProcedure,
 			opts...,
 		),
 		get: connect_go.NewClient[v1.GetRequest, v1.GetResponse](
 			httpClient,
-			baseURL+"/user.v1.UserService/Get",
+			baseURL+UserServiceGetProcedure,
 			opts...,
 		),
 		update: connect_go.NewClient[v1.UpdateRequest, v1.UpdateResponse](
 			httpClient,
-			baseURL+"/user.v1.UserService/Update",
+			baseURL+UserServiceUpdateProcedure,
 			opts...,
 		),
 		delete: connect_go.NewClient[v1.DeleteRequest, v1.DeleteResponse](
 			httpClient,
-			baseURL+"/user.v1.UserService/Delete",
+			baseURL+UserServiceDeleteProcedure,
 			opts...,
 		),
 	}
@@ -131,33 +151,47 @@ type UserServiceHandler interface {
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
 func NewUserServiceHandler(svc UserServiceHandler, opts ...connect_go.HandlerOption) (string, http.Handler) {
-	mux := http.NewServeMux()
-	mux.Handle("/user.v1.UserService/Create", connect_go.NewUnaryHandler(
-		"/user.v1.UserService/Create",
+	userServiceCreateHandler := connect_go.NewUnaryHandler(
+		UserServiceCreateProcedure,
 		svc.Create,
 		opts...,
-	))
-	mux.Handle("/user.v1.UserService/Query", connect_go.NewUnaryHandler(
-		"/user.v1.UserService/Query",
+	)
+	userServiceQueryHandler := connect_go.NewUnaryHandler(
+		UserServiceQueryProcedure,
 		svc.Query,
 		opts...,
-	))
-	mux.Handle("/user.v1.UserService/Get", connect_go.NewUnaryHandler(
-		"/user.v1.UserService/Get",
+	)
+	userServiceGetHandler := connect_go.NewUnaryHandler(
+		UserServiceGetProcedure,
 		svc.Get,
 		opts...,
-	))
-	mux.Handle("/user.v1.UserService/Update", connect_go.NewUnaryHandler(
-		"/user.v1.UserService/Update",
+	)
+	userServiceUpdateHandler := connect_go.NewUnaryHandler(
+		UserServiceUpdateProcedure,
 		svc.Update,
 		opts...,
-	))
-	mux.Handle("/user.v1.UserService/Delete", connect_go.NewUnaryHandler(
-		"/user.v1.UserService/Delete",
+	)
+	userServiceDeleteHandler := connect_go.NewUnaryHandler(
+		UserServiceDeleteProcedure,
 		svc.Delete,
 		opts...,
-	))
-	return "/user.v1.UserService/", mux
+	)
+	return "/user.v1.UserService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case UserServiceCreateProcedure:
+			userServiceCreateHandler.ServeHTTP(w, r)
+		case UserServiceQueryProcedure:
+			userServiceQueryHandler.ServeHTTP(w, r)
+		case UserServiceGetProcedure:
+			userServiceGetHandler.ServeHTTP(w, r)
+		case UserServiceUpdateProcedure:
+			userServiceUpdateHandler.ServeHTTP(w, r)
+		case UserServiceDeleteProcedure:
+			userServiceDeleteHandler.ServeHTTP(w, r)
+		default:
+			http.NotFound(w, r)
+		}
+	})
 }
 
 // UnimplementedUserServiceHandler returns CodeUnimplemented from all methods.
